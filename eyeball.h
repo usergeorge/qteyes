@@ -8,13 +8,17 @@ class Eyeball : public QWidget
     Q_OBJECT
 public:
     explicit Eyeball(QWidget *parent = nullptr);
-
-signals:
+    virtual ~Eyeball() Q_DECL_OVERRIDE;
 
 public slots:
+    void newPosition(const QPoint &p);
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event);
+    virtual void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+private:
+    QPoint mousePosition;
+    static const int eyeline_size;
 };
 
 #endif // EYEBALL_H
