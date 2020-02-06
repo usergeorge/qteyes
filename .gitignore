@@ -1,0 +1,8 @@
+*.o
+*~
+qteyes
+Makefile
+moc_*.h
+moc_*.cpp
+ui_*.h
+.qmake.stash
