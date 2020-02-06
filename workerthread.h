@@ -9,15 +9,16 @@ class WorkerThread : public QThread
     Q_OBJECT
 
 public:
-    WorkerThread(QObject *parent = nullptr)
-        : QThread(parent)
-    {}
-    virtual ~WorkerThread() override { requestInterruption(); quit(); wait(1010); }
+    WorkerThread(QObject *parent = nullptr);
+    virtual ~WorkerThread() override;
     void run() override;
-//signals:
-//    void resultReady(const QString &s);
+signals:
+    void newPosition(const QPoint &p);
+
 private:
     QPoint lastPosition;
+
+    static const int poll_duration_ms;
 };
 
 
