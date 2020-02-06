@@ -6,6 +6,7 @@
 namespace Ui {
 class QtEyes;
 }
+class WorkerThread;
 
 class QtEyes : public QMainWindow
 {
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::QtEyes *ui;
+    WorkerThread *workerThread;
 };
 
 #endif // QTEYES_H

@@ -3,15 +3,18 @@
 
 #include <QWidget>
 
-class eyeball : public QWidget
+class Eyeball : public QWidget
 {
     Q_OBJECT
 public:
-    explicit eyeball(QWidget *parent = nullptr);
+    explicit Eyeball(QWidget *parent = nullptr);
 
 signals:
 
 public slots:
+
+protected:
+    void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif // EYEBALL_H

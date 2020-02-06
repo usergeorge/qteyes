@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        qteyes.cpp
+        qteyes.cpp \
+    eyeball.cpp \
+    workerthread.cpp
 
 HEADERS += \
-        qteyes.h
+        qteyes.h \
+    eyeball.h \
+    workerthread.h
 
 FORMS += \
         qteyes.ui
