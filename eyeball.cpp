@@ -20,8 +20,11 @@ Eyeball::~Eyeball()
 
 void Eyeball::newPosition(const QPoint &p)
 {
-    qDebug() << this << "mouse pos " << p;
+//    qDebug() << this << "mouse pos " << p;
     mousePosition = p;
+    /* repaint the whole screen */
+    update();   // slow screen update, optimized for multi updates
+//    repaint();   // repaint the screen immediately, may flicker
 }
 
 
