@@ -20,9 +20,10 @@ QtEyes::QtEyes(QWidget *parent) :
     ui->setupUi(this);
 
 
+    // tell eyeball the position of the mouse pointer
+    connect(workerThread, &WorkerThread::newPosition, ui->lefteye, &Eyeball::newPosition);
+    connect(workerThread, &WorkerThread::newPosition, ui->righteye, &Eyeball::newPosition);
 
-    // print mouse position in a row
-//    connect(workerThread, &WorkerThread::finished, workerThread, &QObject::deleteLater);
     workerThread->start();
 }
 
