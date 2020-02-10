@@ -10,12 +10,13 @@ QtEyes::QtEyes(QWidget *parent) :
     ui(new Ui::QtEyes),
     workerThread(new WorkerThread(this))
 {
+    /* make the eyes transparent */
 //    setStyleSheet("background-color: rgba(0,0,0,0)");
     // or
 //    setWindowFlags(Qt::FramelessWindowHint);
-//    setAttribute(Qt::WA_NoSystemBackground);
-//    setAttribute(Qt::WA_TranslucentBackground);
-//    setAttribute(Qt::WA_TransparentForMouseEvents);
+    setAttribute(Qt::WA_NoSystemBackground);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_TransparentForMouseEvents);
 
     ui->setupUi(this);
 
