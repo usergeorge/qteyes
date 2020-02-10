@@ -16,6 +16,9 @@ public:
     explicit QtEyes(QWidget *parent = nullptr);
     ~QtEyes();
 
+private slots:
+    void showContextMenu(const QPoint &pos);
+
 private:
     Ui::QtEyes *ui;
     WorkerThread *workerThread;

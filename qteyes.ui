@@ -10,6 +10,9 @@
     <height>126</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::CustomContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>QtEyes</string>
   </property>
@@ -50,5 +53,25 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>QtEyes</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>QtEyes</receiver>
+   <slot>showContextMenu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>85</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>85</x>
+     <y>62</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showContextMenu(QPoint)</slot>
+ </slots>
 </ui>

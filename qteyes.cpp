@@ -34,3 +34,10 @@ QtEyes::~QtEyes()
     delete ui;
     delete workerThread;
 }
+
+
+void QtEyes::showContextMenu(const QPoint &pos)
+{
+
+}
+
