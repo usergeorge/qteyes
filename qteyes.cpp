@@ -65,6 +65,7 @@ void QtEyes::toggleShowFrame(void)
         setWindowFlags((windowFlags() & ~Qt::FramelessWindowHint) | Qt::X11BypassWindowManagerHint);
     else
         setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+    show();
 
 }
 
@@ -75,9 +76,10 @@ void QtEyes::toggleStayOnTop(void)
 
 //    setWindowFlag(Qt::WindowStaysOnTopHint, !isOnTop);
     if (isOnTop)
-        setWindowFlags(windowFlags() & ~Qt::WindowStaysOnTopHint);
+        setWindowFlags(windowFlags() & ~(Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint));
     else
-        setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+        setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
+    show();
 
 }
 
