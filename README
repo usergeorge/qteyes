@@ -1,0 +1,12 @@
+This is qteyes, an xeyes clone.
+
+I wrote this piece of software to find my mouse pointer on the two or three
+monitor screens connected to my computer.
+Unfortunately xeyes did not work well with the Ubuntu 18.4 distribution, so
+I started to write my own eyes app. Currently this piece of software is
+doing its jobs with the genome desktop. But not with the KDE desktop. It
+still needs some polishing. Which is sceduled to where I got some free time.
+
+Feel free to contact me by github.com in case you need support or got
+suggestions for an improovement - at best with some example code or code
+patch.
