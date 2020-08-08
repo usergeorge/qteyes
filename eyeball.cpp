@@ -118,16 +118,14 @@ void Eyeball::paintEvent(QPaintEvent *event)
      * paint a line between the center point and
      * the mouse position.
      */
-//    const QPoint widget_center = widget_rect.center();
-//    const QPoint mouse_center = mousePosition;
-//    const QPoint diff_center = mouse_center - widget_center;
-////    double invarc = diff_center.y();
-////    invarc /= diff_center.x();
-//    double arc = atan2( diff_center.y(), diff_center.x() );
-//    arc *= 360;
-//    arc /= M_PI;
-//    if (arc < 0)
-//        arc += 360;
+    const QPoint widget_center = widget_rect.center();
+    const QPoint mouse_center = mousePosition;
+    const QPoint diff_center = mouse_center - widget_center;
+//    double invarc = diff_center.y();
+//    invarc /= diff_center.x();
+    double arc = atan2( diff_center.y(), diff_center.x() );
+    double deg_arc = arc * 180;
+    deg_arc /= M_PI;
 
 //    squareTransform.rotate(arc);
 
@@ -168,6 +166,20 @@ void Eyeball::paintEvent(QPaintEvent *event)
 
 #else
 
+
+    /* we need to have the inverse transformation matrix
+     * to calculate a virtual mouse position. This is to
+     * get the real mouse position after applying the
+     * paint transformation matrix. */
+    bool is_paint_matrix_invertible;
+    QTransform inverse_paint_matrix = squareTransform.inverted(&is_paint_matrix_invertible);
+    if ( !is_paint_matrix_invertible ) {
+        qDebug() << "error: can not invert the paint matrix " << squareTransform;
+        exit(EXIT_FAILURE);
+    }
+
+
+
     /* calculate new iris position.
      *
      * The iris follows the mouse pointer.
@@ -178,19 +190,34 @@ void Eyeball::paintEvent(QPaintEvent *event)
     const QPoint paint_rect_center_point = paint_rect.center();
     const QPoint global_paint_center = mapToGlobal(paint_rect_center_point);
     /* get the arc between the widget center and the mouse pointer */
-//    const QPoint widget_center = widget_rect.center();
+    const QPoint widget_center = widget_rect.center();
+    const QPoint global_widget_center = mapToGlobal(widget_center);
     const QPoint global_mouse_point = mousePosition;
+//    const QPoint global_mouse_point = inverse_paint_matrix.map(QPoint(100,100) + global_paint_center);  // test code
+//    const QPoint global_mouse_point = inverse_paint_matrix.map(QPoint(0,100) + global_widget_center);  // test code
+//    const QPoint global_mouse_point = (QPoint(0,100) + global_widget_center);  // test code
+//    const QPoint global_mouse_point = inverse_paint_matrix.map(mousePosition);
 //    const QPoint diff_center = mouse_center - widget_center;
-    const QPoint diff_center = global_mouse_point - global_paint_center;
+//    const QPoint diff_center = global_mouse_point - global_widget_center;
+    const QPoint diff_center = inverse_paint_matrix.map(global_mouse_point - global_widget_center);
 
     const double arc = atan2( diff_center.y(), diff_center.x() );
-//    double darc = arc * 180;
-//    darc /= M_PI;
+        // this is only test code, calculate the arc in degree
+        double darc = arc * 180;
+        darc /= M_PI;
+
     /* now we got the arc lets calculate the radius length
      * to the mouse pointer */
+#if 0
     const double cos_arc = cos(arc);
     double radius = diff_center.x();
     radius /= cos_arc;
+#else
+//    double r1 = (diff_center.x()*diff_center.x());
+//    double r2 = (diff_center.y()*diff_center.y());
+    double radius = sqrt((diff_center.x()*diff_center.x()) + (diff_center.y()*diff_center.y()));
+//    double radius = sqrt(r1 + r2);
+#endif
     /* if radius is too much, we need to clip it.
      * Clip it to the radius of the eye line
      * minus pen width
@@ -203,7 +230,10 @@ void Eyeball::paintEvent(QPaintEvent *event)
     }
 
     const QPoint iris_movement = diff_center * length_correction_factor;
-    const QPoint iris_upper_left_point = paint_rect_center_point + iris_movement - QPoint(iris_size, iris_size)/2;
+//    const QPoint iris_movement = QPoint(0, 0); // test
+//    const QPoint iris_movement = QPoint(-paint_widget_size/2, -paint_widget_size/2); // test
+    const QPoint iris_in_center = paint_rect_center_point - QPoint(iris_size, iris_size)/2;
+    const QPoint iris_upper_left_point = iris_in_center + iris_movement;
 
     /* note: a quite sound looking combination of rectangular
      * size and pen width produces a blind spot (white pixel)
@@ -218,8 +248,16 @@ void Eyeball::paintEvent(QPaintEvent *event)
 //    iris_rect.moveTo(iris_center_point);
     QRect iris_rect(iris_upper_left_point, QSize(iris_size, iris_size));
 
+    const QPoint iris_widget_upper_left_point = squareTransform.map(iris_upper_left_point); // test code
+
     pen.setWidth(iris_size);
     p.setPen(pen);
+
+//    QTransform iris_transformation;
+////    iris_transformation.translate(-paint_widget_size/2, -paint_widget_size/2);
+//    iris_transformation.rotate(30);
+//    iris_transformation.translate(+paint_widget_size/2, +paint_widget_size/2);
+//    p.setTransform(iris_transformation);
 
     p.drawEllipse(iris_rect);
 
