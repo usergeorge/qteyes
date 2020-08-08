@@ -42,11 +42,43 @@ void QtEyes::showContextMenu(const QPoint &pos)
 {
     QMenu contextMenu(tr("Context menu"), this);
 
+    QAction action_showFrame("Show frame", this);
+    connect(&action_showFrame, SIGNAL(triggered()), this, SLOT(toggleShowFrame()));
+    contextMenu.addAction(&action_showFrame);
+    QAction action_stayOnTop("Stay on top", this);
+    connect(&action_stayOnTop, SIGNAL(triggered()), this, SLOT(toggleStayOnTop()));
+    contextMenu.addAction(&action_stayOnTop);
     QAction action_exit("Exit", this);
     connect(&action_exit, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()), Qt::QueuedConnection);
     contextMenu.addAction(&action_exit);
 
     contextMenu.exec(mapToGlobal(pos));
+}
+
+void QtEyes::toggleShowFrame(void)
+{
+    bool isFrameless = 0 != (windowFlags() & Qt::FramelessWindowHint);
+    qDebug() << "show frame, frameless currently " << isFrameless;
+
+//    setWindowFlag(Qt::WindowStaysOnTopHint, !isOnTop);
+    if (isFrameless)
+        setWindowFlags((windowFlags() & ~Qt::FramelessWindowHint) | Qt::X11BypassWindowManagerHint);
+    else
+        setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+
+}
+
+void QtEyes::toggleStayOnTop(void)
+{
+    bool isOnTop = 0 != (windowFlags() & Qt::WindowStaysOnTopHint);
+    qDebug() << "stay on top, currently " << isOnTop;
+
+//    setWindowFlag(Qt::WindowStaysOnTopHint, !isOnTop);
+    if (isOnTop)
+        setWindowFlags(windowFlags() & ~Qt::WindowStaysOnTopHint);
+    else
+        setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+
 }
 
 void QtEyes::mousePressEvent(QMouseEvent *event)

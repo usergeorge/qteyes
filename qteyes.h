@@ -23,6 +23,8 @@ protected:
 
 private slots:
     void showContextMenu(const QPoint &pos);
+    void toggleShowFrame(void);
+    void toggleStayOnTop(void);
 
 private:
     Ui::QtEyes *ui;
