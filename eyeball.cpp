@@ -50,6 +50,7 @@ void Eyeball::paintEvent(QPaintEvent *event)
     pen.setWidth(eyeline_size);
     p.setPen(pen);
 //    p.setBackgroundMode(Qt::TransparentMode);
+    p.setRenderHint(QPainter::Antialiasing, true);
 
 #if 0
     /* paint the eye into the available space.
@@ -188,7 +189,7 @@ void Eyeball::paintEvent(QPaintEvent *event)
      * in which case it points in a line from the center of the
      * eye line circle to the mouse pointer.    */
     const QPoint paint_rect_center_point = paint_rect.center();
-    const QPoint global_paint_center = mapToGlobal(paint_rect_center_point);
+//    const QPoint global_paint_center = mapToGlobal(paint_rect_center_point);
     /* get the arc between the widget center and the mouse pointer */
     const QPoint widget_center = widget_rect.center();
     const QPoint global_widget_center = mapToGlobal(widget_center);
@@ -201,10 +202,10 @@ void Eyeball::paintEvent(QPaintEvent *event)
 //    const QPoint diff_center = global_mouse_point - global_widget_center;
     const QPoint diff_center = inverse_paint_matrix.map(global_mouse_point - global_widget_center);
 
-    const double arc = atan2( diff_center.y(), diff_center.x() );
-        // this is only test code, calculate the arc in degree
-        double darc = arc * 180;
-        darc /= M_PI;
+//    const double arc = atan2( diff_center.y(), diff_center.x() );
+//        // this is only test code, calculate the arc in degree
+//        double darc = arc * 180;
+//        darc /= M_PI;
 
     /* now we got the arc lets calculate the radius length
      * to the mouse pointer */
@@ -248,7 +249,7 @@ void Eyeball::paintEvent(QPaintEvent *event)
 //    iris_rect.moveTo(iris_center_point);
     QRect iris_rect(iris_upper_left_point, QSize(iris_size, iris_size));
 
-    const QPoint iris_widget_upper_left_point = squareTransform.map(iris_upper_left_point); // test code
+//    const QPoint iris_widget_upper_left_point = squareTransform.map(iris_upper_left_point); // test code
 
     pen.setWidth(iris_size);
     p.setPen(pen);
