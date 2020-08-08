@@ -1,7 +1,9 @@
 #include "qteyes.h"
 #include "ui_qteyes.h"
 #include "workerthread.h"
-
+#include <QMenu>
+#include <QMouseEvent>
+#include <QDebug>
 
 
 
@@ -38,6 +40,38 @@ QtEyes::~QtEyes()
 
 void QtEyes::showContextMenu(const QPoint &pos)
 {
+    QMenu contextMenu(tr("Context menu"), this);
 
+    QAction action_exit("Exit", this);
+    connect(&action_exit, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()), Qt::QueuedConnection);
+    contextMenu.addAction(&action_exit);
+
+    contextMenu.exec(mapToGlobal(pos));
 }
 
+void QtEyes::mousePressEvent(QMouseEvent *event)
+{
+//    qDebug() << "mouse press " << event;
+    if (Qt::LeftButton == event->button()) {
+        inMoveLocalPoint = event->pos();
+        setCursor(Qt::ClosedHandCursor);
+
+//        QPoint upper_left_window_point = event->globalPos() - inMoveLocalPoint;
+//        qDebug() << "window position " << upper_left_window_point;
+    }
+}
+
+void QtEyes::mouseMoveEvent(QMouseEvent *event)
+{
+//    qDebug() << "mouse move " << event;
+
+    QPoint upper_left_window_point = event->globalPos() - inMoveLocalPoint;
+//    qDebug() << "window position " << upper_left_window_point;
+    move(upper_left_window_point);
+}
+
+void QtEyes::mouseReleaseEvent(QMouseEvent *event)
+{
+//    qDebug() << "mouse release " << event;
+    setCursor(Qt::ArrowCursor);
+}
