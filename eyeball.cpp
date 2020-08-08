@@ -6,6 +6,8 @@
 
 
 const int Eyeball::eyeline_size = 10;
+const int Eyeball::paint_widget_size = 120;
+const int Eyeball::iris_size = Eyeball::eyeline_size-2;
 
 
 Eyeball::Eyeball(QWidget *parent)
@@ -86,20 +88,19 @@ void Eyeball::paintEvent(QPaintEvent *event)
      * create a transformation matrix to correct the
      * new square rectangle */
     const QRect widget_rect = rect();
-    int width = widget_rect.width();
-    int height = widget_rect.height();
-    int maxsize = qMax(width, height);
-    QRect paint_rect(widget_rect.left(), widget_rect.top(), maxsize, maxsize);
-    const int paintrect_correction_topleft = eyeline_size/2;
-    const int paintrect_correction_bottomright = -eyeline_size/2 -1;
-    paint_rect.adjust(paintrect_correction_topleft, paintrect_correction_topleft, paintrect_correction_bottomright, paintrect_correction_bottomright);
+    QRect paint_rect(widget_rect.left(), widget_rect.top(), paint_widget_size, paint_widget_size);
 
     /* prepare transformation matrix for the eye line */
     QTransform squareTransform;
     QSizeF rect_new_size = widget_rect.size();
-    rect_new_size /= maxsize;
+    rect_new_size /= paint_rect.width();
     squareTransform.scale(rect_new_size.width(), rect_new_size.height());
     p.setTransform(squareTransform);
+
+    /* adjust (shrink) the painting square for the bigger pen size */
+    const int paintrect_correction_topleft = eyeline_size/2;
+    const int paintrect_correction_bottomright = -eyeline_size/2 -1;
+    paint_rect.adjust(paintrect_correction_topleft, paintrect_correction_topleft, paintrect_correction_bottomright, paintrect_correction_bottomright);
 
 
     QPainterPath circle_painter_path;
@@ -200,7 +201,7 @@ void Eyeball::paintEvent(QPaintEvent *event)
     }
 
     const QPoint iris_movement = diff_center * length_correction_factor;
-    const QPoint iris_upper_left_point = paint_rect_center_point + iris_movement - QPoint(eyeline_size-2, eyeline_size-2)/2;
+    const QPoint iris_upper_left_point = paint_rect_center_point + iris_movement - QPoint(iris_size, iris_size)/2;
 
     /* note: a quite sound looking combination of rectangular
      * size and pen width produces a blind spot (white pixel)
@@ -213,7 +214,7 @@ void Eyeball::paintEvent(QPaintEvent *event)
 ////    iris_position -= QPoint(1,1);
 ////    const QRect iris_rect(iris_position, QSize(eyeline_size-2, eyeline_size-2));
 //    iris_rect.moveTo(iris_center_point);
-    QRect iris_rect(iris_upper_left_point, QSize(eyeline_size-2, eyeline_size-2));
+    QRect iris_rect(iris_upper_left_point, QSize(iris_size, iris_size));
 
     pen.setWidth(eyeline_size-2);
     p.setPen(pen);

@@ -19,6 +19,8 @@ protected:
 private:
     QPoint mousePosition;
     static const int eyeline_size;
+    static const int paint_widget_size;
+    static const int iris_size;
 };
 
 #endif // EYEBALL_H
