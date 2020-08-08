@@ -70,7 +70,7 @@ void QtEyes::mouseMoveEvent(QMouseEvent *event)
     move(upper_left_window_point);
 }
 
-void QtEyes::mouseReleaseEvent(QMouseEvent *event)
+void QtEyes::mouseReleaseEvent(QMouseEvent * /*event*/)
 {
 //    qDebug() << "mouse release " << event;
     setCursor(Qt::ArrowCursor);
