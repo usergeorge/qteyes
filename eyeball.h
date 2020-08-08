@@ -21,6 +21,7 @@ private:
     static const int eyeline_size;
     static const int paint_widget_size;
     static const int iris_size;
+    static const int iris_radius_reduction;
 };
 
 #endif // EYEBALL_H

@@ -8,7 +8,7 @@
 const int Eyeball::eyeline_size = 10;
 const int Eyeball::paint_widget_size = 120;
 const int Eyeball::iris_size = Eyeball::eyeline_size-2;
-
+const int Eyeball::iris_radius_reduction = 3*Eyeball::eyeline_size;
 
 Eyeball::Eyeball(QWidget *parent)
     :QWidget(parent)
@@ -111,7 +111,7 @@ void Eyeball::paintEvent(QPaintEvent *event)
     p.drawPath(circle_painter_path);
 
 
-
+#if 0
     /* draw the iris
      *
      * get the center of the this widget.
@@ -166,6 +166,8 @@ void Eyeball::paintEvent(QPaintEvent *event)
 //    /* now apply */
 //    p.setTransform(iris_transform);
 
+#else
+
     /* calculate new iris position.
      *
      * The iris follows the mouse pointer.
@@ -193,7 +195,7 @@ void Eyeball::paintEvent(QPaintEvent *event)
      * Clip it to the radius of the eye line
      * minus pen width
      * minus some pixel */
-    const double max_radius = paint_rect_center_point.x() - 2*eyeline_size;
+    const double max_radius = paint_rect_center_point.x() - iris_radius_reduction;
     double length_correction_factor = 1.0;
     if (radius > max_radius) {
         length_correction_factor = max_radius / radius;
@@ -216,11 +218,12 @@ void Eyeball::paintEvent(QPaintEvent *event)
 //    iris_rect.moveTo(iris_center_point);
     QRect iris_rect(iris_upper_left_point, QSize(iris_size, iris_size));
 
-    pen.setWidth(eyeline_size-2);
+    pen.setWidth(iris_size);
     p.setPen(pen);
 
     p.drawEllipse(iris_rect);
 
+#endif
 
 #endif
 
